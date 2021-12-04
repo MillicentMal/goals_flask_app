@@ -9,7 +9,10 @@ class Tests(unittest.TestCase):
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
     
-    #check for user
+    #check delete_task
+    def test_delete(self, id):
+        
+        
 
 
 if __name__ == "__main__":

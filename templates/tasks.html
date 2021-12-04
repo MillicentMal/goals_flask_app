@@ -1,20 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-  <a href="{{url_for('logout')}}">LO</a>
+{% extends "layout.html" %}
+{% block body %}
+
+{% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
+<span>PROGRESS : {{ current_user.progress }}</span>
+  <a href="{{url_for('logout')}}">LOGOUT</a>
     <table>
 
    
             <tr>
               <th>Task Name</th>
               <th>Task description</th>
-              <th>Date Created</th>
+              <th>Task Deletion</th>
+              <th>Task Edits</th>
               <th>Task Status</th>
             
             </tr>
@@ -22,8 +21,9 @@
             <tr>
               <td>{{ task.name }}</td>
               <td>{{ task.description }}</td>
-              <td>{{ task.time_created }}</td>
-              <td>{{ task.completed }}</td>
+              <td>  <a class="btn" href="/delete/{{ task.id }}">Delete</a> </td>
+              <td>  <a class="btn" href="/edit_task/{{ task.id }}">EDIT TASK</a> </td>
+              <td> <a class="btn" href="/mark/{{ task.id }}">{{ task.completed }}</td>
             </tr>
        {% endfor %} 
     </table>
@@ -34,6 +34,4 @@
     
     <input type="submit">
 </form>
-  
-</body>
-</html>
+{% endblock %}
