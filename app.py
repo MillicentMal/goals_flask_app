@@ -36,41 +36,54 @@ class Task(db.Model):
 
 
 @app.route('/', methods=['GET', 'POST'])
-def index():
-    if user_logged_in:
-        return redirect(url_for('tasks'))
-    if request.method == 'POST':
-        name = request.form.get("nickname") 
-        
-        user_name = User.query.filter_by(nickname=name).first()
-        if not user_name:
-            new_user = User(nickname=name, progress=0)
-            try:
-                db.session.add(new_user)
-                db.session.commit()
-                login_user(new_user)
-                return redirect(url_for('tasks'))
-            except:
-                return "Failed to create user"
-        else:
-            return redirect(url_for('tasks'))
-            
+def index():           
     return render_template('index.html')
 
 
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        name = request.form.get("nickname") 
+        user_name = User.query.filter_by(nickname=name).first()
     
-    
-    
-    
+        if not user_name:
+            return redirect(url_for('add_user'))
+        login_user(user_name)
+        return redirect(url_for('tasks'))
+        
+    return render_template('login.html')
+
+
+@app.route('/add_user', methods=['GET', 'POST'])
+def add_user():
+    if request.method == 'POST':
+        new_user = request.form.get("nickname") 
+        if user_check(new_user):
+            return redirect(url_for('login')), "<h1>Failed to create</h1>"
+        user = User(nickname=new_user)
+        try:
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('login'))
+        except:
+            return "Failed to create new user"
+    return render_template('new_user.html')
+
+
+@app.route('/logout')
+@login_required
+def logout():
+   logout_user()
+   return redirect(url_for('index'))
+ 
 @app.route('/tasks', methods=['GET', 'POST'])
 @login_required
 def tasks():
     if request.method == "POST":
         name = request.form.get("name")
         description = request.form.get("description")
-        time_created = datetime.datetime.today()
-        
-        
+        time_created = datetime.datetime.today()        
         new_task = Task(name=name, description=description, completed=False, time_created=time_created.date(), task_owner=current_user.id)
         try:
             db.session.add(new_task)
@@ -79,6 +92,15 @@ def tasks():
             return "Failed to add new task"
     tasks = Task.query.filter_by(task_owner=current_user.id).all()
     return render_template('tasks.html', tasks=tasks)
+
+
+
+#HELPER METHODS
+def user_check(name):
+    user_name = User.query.filter_by(nickname=name).first()
+    if user_name:
+        return True
+    return False
 
 if __name__ =="__main__":
     app.run(debug=True)
