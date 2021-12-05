@@ -25,11 +25,11 @@ class User(db.Model, UserMixin):
     nickname = db.Column(db.String(256), unique=True)
     progress = db.Column(db.Integer)
     task =  db.relationship('Task', backref='user', cascade="all, delete-orphan")
+        
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10))
-    time_created = db.Column(db.DateTime)
     description = db.Column(db.String(256))
     completed = db.Column(db.String(256))
     task_owner = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -60,7 +60,8 @@ def add_user():
     if request.method == 'POST':
         new_user = request.form.get("nickname") 
         if user_check(new_user):
-            return redirect(url_for('login')), "<h1>Failed to create</h1>"
+            flash("You already have an account. Please log in")
+            return redirect(url_for('login'))
         user = User(nickname=new_user, progress=0)
         try:
             db.session.add(user)
@@ -83,30 +84,39 @@ def logout():
 @login_required
 def tasks():
     tasks = Task.query.filter_by(task_owner=current_user.id).all()
-    if request.method == "POST" and  counter() < 10:
+    if request.method == "POST" and  counter(current_user) < 10:
         name = request.form.get("name")
         description = request.form.get("description")
-        time_created = datetime.datetime.today()        
-        new_task = Task(name=name, description=description, completed="TO-DO", time_created=time_created.date(), task_owner=current_user.id)
+        new_task = Task(name=name, description=description, completed="TO-DO", task_owner=current_user.id)
         try:
             db.session.add(new_task)
             db.session.commit()
         except:
             return "Failed to add new task"
-    if request.method == "POST" and  counter() >= 10:
+    if request.method == "POST" and  counter(current_user) >= 10:
         flash('You can not do more than 10 goals a day. You are human not a machine')
+        message = progress_check(current_user.id)
         tasks = Task.query.filter_by(task_owner=current_user.id).all()
-        return render_template('tasks.html', tasks=tasks)    
+        return render_template('tasks.html', tasks=tasks, message=message)
+    message = progress_check(current_user.id)
     tasks = Task.query.filter_by(task_owner=current_user.id).all()
-    return render_template('tasks.html', tasks=tasks)
+    return render_template('tasks.html', tasks=tasks, message=message)
 
 @app.route("/delete/<int:task_id>")
 @login_required
 def delete_task(task_id):
   task = Task.query.filter_by(id=task_id).first()
+  
   if task:
     db.session.delete(task)
+    if counter(current_user) == 0: 
+        current_user.progress = 0
+    else:
+        current_user.progress -= 10
+    
     db.session.commit()
+    if tasks == 0: 
+        current_user.progress = 0
     return redirect(url_for('tasks'))
 
 @app.route('/edit_task/<int:task_id>', methods=['GET', 'POST'])
@@ -125,12 +135,26 @@ def edit_task(task_id):
 def mark(task_id):
     tasks = Task.query.filter_by(task_owner=current_user.id).all()
     task = Task.query.get_or_404(task_id)
-    if task:
+    if task and task.completed != "COMPLETED":
         task.completed = "COMPLETED"
         current_user.progress += 10
         db.session.commit()
         return redirect(url_for('tasks'))
     return render_template('tasks.html', tasks=tasks)
+
+@app.route('/progress_check/<int:current_user_id>')
+@login_required
+def progress_check(current_user_id):
+    current_user_id = current_user.id
+    user  = User.query.filter_by(id=current_user_id).first()
+    message = ""
+    progression = 100 - user.progress
+    if user.progress < 80:
+        message += "You still have {} PERCENT left to reach your goal".format(progression)
+    elif user.progress >= 80:
+            message += "Congratulations! You have reached your goal for the day. Call us for a free drink!"
+    return message 
+
 
 #HELPER METHODS
 def user_check(name):
@@ -139,9 +163,10 @@ def user_check(name):
         return True
     return False
 
-def counter():
+def counter(current_user):
     tasks = Task.query.filter_by(task_owner=current_user.id).count()
     return tasks
+
 
 
 if __name__ =="__main__":
