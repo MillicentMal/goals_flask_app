@@ -164,8 +164,13 @@ def user_check(name):
     return False
 
 def counter(current_user):
-    tasks = Task.query.filter_by(task_owner=current_user.id).count()
-    return tasks
+    try:
+        tasks = Task.query.filter_by(task_owner=current_user.id).all().count()
+        return tasks
+    except AttributeError:
+        return 0
+    
+  
 
 
 
