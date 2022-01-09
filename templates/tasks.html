@@ -5,41 +5,122 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TASKS | COMPLETED</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <body>
-  <span style="color: red;font-weight: 200; font-size: 20px;">PROGRESS : {{ current_user.progress }}</span>
-<div style="color: red; font-weight: bold; font-size: 50px">
-  {{ message }}
-</div>
-  <a href="{{url_for('logout')}}">LOGOUT</a>
-    <table>
-
-   
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+    <div class="container">
+      <a class="navbar-brand" href="#"><button class="btn btn-primary btn-lg text-white h1 fw-bold" data-bs-toggle="modal" data-bs-target="#add"> Add Goal</button></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navmenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('logout')}}">LOGOUT</a>
+          </li>
+          
+          <li class="nav-item">
+<a class="nav-link" href="{{url_for('index')}}">HOME</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<section class="p-5 bg-secondary">
+  <div class="container">
+  <div class="d-sm-flex align-items-center-justify-content-betweeen">
+    <div class="d-flex flex-column mb-3">
+      <div class="p-2 "><p class="text-white h1">  {{ progress }} </p></div>
+      <div class="p-2">
+        <table class="table table-dark">
+          <thead>
             <tr>
-              <th>Task Name</th>
-              <th>Task description</th>
-              <th>Task Deletion</th>
-              <th>Task Edits</th>
-              <th>Task Status</th>
-            
-            </tr>
-         {% for task in tasks %}
-            <tr>
-              <td>{{ task.name }}</td>
-              <td>{{ task.description }}</td>
-              <td>  <a class="btn" href="/delete/{{ task.id }}">Delete</a> </td>
-              <td>  <a class="btn" href="/edit_task/{{ task.id }}">EDIT TASK</a> </td>
-              <td> <a class="btn" href="/mark/{{ task.id }}">{{ task.completed }}</td>
-            </tr>
-       {% endfor %} 
-    </table>
-         
-    <form method="POST">
-    <input type="text" name="name">
-    <input type="text" name="description">
+              <th scope="col">#</th>
+              <th scope="col">Goal Name</th>
+              <th scope="col">Description</th>
+              <th scope="col">Status</th>
+              <th scope="col">Delete</th>
+              <th scope="col">Update</th>
     
-    <input type="submit">
-</form>
 
+              
+            </tr>
+          </thead>
+          <tbody>        
+          {% for task in tasks %}
+          <tr>
+            <td>{{ task.id }}</td>
+            <td>{{ task.name }}</td>
+            <td>{{ task.description }}</td>
+            <td> <a class="btn-dark" href="/mark/{{ task.id }}">{{ task.completed }}</td>
+            <td>  <a class="btn-dark" href="/delete_task/{{ task.id }}">Delete</a> </td>
+            <td>  <a class="btn-dark" href="/edit_task/{{ task.id }}">Update</a> </td>
+           
+          </tr>
+     {% endfor %} 
+            </tr>
+          </tbody>
+        </table>
+        
+  </div>
+    </div> 
+    <img src="{{url_for('static', filename='images/progress.svg')}}" alt="" class="w-50 img-fluid"> 
+    </div>
+  </div>
+</div>
+ </div>
+</section>
+  
+
+         
+ 
+<footer class="p-5 bg-dark text-white text-center position-relative">
+  <div class="container">
+
+    <p class="lead">Copyright &copy; Done by <a class="nav-link" href="https://github.com/MillicentMal/test_summative.git">Millicent Malinga</a><p class="text-warning h1">Inspired by Rich Habits</p></p>
+
+    <a href="#" class="position-absolute bottom-0 end-0 p-5">
+      <i class="bi bi-arrow-up-circle h1"></i>
+    </a>
+
+  </div>
+</footer>
+
+<div class="modal fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTaskLabel">Add Goal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <p class="lead">
+          Add another goal
+      </p>
+      <form method="POST">
+        
+          <div class="mb-3">
+              <label for="task-name" class="col-form-label">Goal Name</label>
+              <input type="text" class="form-control" id="task-name" name="name" placeholder="Enter Goal name">
+          </div>
+          <div class="mb-3">
+              <label for="description" class="col-form-label">Description</label>
+              <input type="text" class="form-control" id="description" name="description" placeholder="Describe your goal">
+          </div>
+          <input type="submit" class="btn btn-primary">
+          </form>
+   
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        
+      </div>
+      </div>
+      </div>
+      </div>
+
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>
