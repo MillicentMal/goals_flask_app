@@ -261,8 +261,6 @@ def page_not_found(e):
 
     return render_template('history.html'), 400
 
-def getApp():
-    return app
 
 if __name__ =="__main__":
     with app.app_context():
