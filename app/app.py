@@ -7,10 +7,11 @@ from werkzeug.utils import redirect
 
 # app creation adn configuration
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///storage.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Lethabo2016.@localhost:3306/app'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "my super secret key that no one is supposed to know"
 db = SQLAlchemy(app)
+
 
 # handling logins
 login_manager = LoginManager()
