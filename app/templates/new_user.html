@@ -4,11 +4,138 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOGIN | COMPLETED</title>
+    <title>WELCOME | DAILY GOALS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <body>
-    <form method="POST">
-        <input type="text" name="nickname" placeholder="NICKNAME">
-      <input type="submit">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+    <div class="container">
+      <a class="navbar-brand" href="#">DAILY GOALS</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navmenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('index')}}">HOME</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('add_user')}}">REGISTER</a>
+          </li>
+          <li class="nav-item">
+<a class="nav-link" href="{{url_for('tasks')}}">TASKS</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<!-- Banner -->
+<section class="bg-dark text-light p-5 text-center text-sm-start">
+    <div class="container">
+        
+            <h4 class="mb-3 mb-md-0">CREATE A NEW ACCOUNT</h4>
+            <form method="POST">
+        
+                <div class="mb-3">
+                    <label for="nickname" class="col-form-label">NickName</label>
+                    <input type="text" class="form-control" id="task-name" name="nickname" placeholder="Enter your Nickname">
+                </div>
+                
+                <input type="submit" class="btn btn-primary">
+                </form>
+        </div>
+    
+
+  </div>
+</section>
+
+<!-- Quotes -->
+<section class="bg-secondary text-dark p-5">
+  
+</section>
+
+<!-- Our Target -->
+<section class="p-5 bg-light">
+  <div class="container">
+    <div class="row text-center g-4">
+      <div class="col-md">
+        <div class="card bg-dark text-light">
+
+            <div class="card-body text-center">
+                <div class="h1 mb-3">
+                  <i class="bi bi-person-fill bg-light"></i>
+                </div>
+                <h3 class="card-title mb-3">Students</h3>
+                <p class="card-text">
+                    We target students suffering from overburn and have no direction on how to achieve their goals
+                </p>
+                <a href="#" class="btn btn-primary">Read More</a>
+            </div>
+        </div>
+        </div>
+        <div class="col-md">
+          <div class="card bg-dark text-light">
+  
+              <div class="card-body text-center">
+                  <div class="h1 mb-3">
+                    <i class="bi bi-person-fill bg-white"></i>
+                  </div>
+                  <h3 class="card-title mb-3">Professionals</h3>
+                  <p class="card-text">
+                      We target professionals working on doing better in their careers and achieve their goals
+                  </p>
+                  <a href="#" class="btn btn-primary">Read More</a>
+              </div>
+          </div>
+    </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- footer -->
+<footer class="p-5 bg-dark text-white text-center position-relative">
+  <div class="container">
+
+    <p class="lead">Copyright &copy; Done by <a class="nav-link" href="https://github.com/MillicentMal/test_summative.git">Millicent Malinga</a></p>
+
+    <a href="#" class="position-absolute bottom-0 end-0 p-5">
+      <i class="bi bi-arrow-up-circle h1"></i>
+    </a>
+
+  </div>
+</footer>
+
+<div class="modal fade" id="add" tabindex="-1" aria-labelledby="addLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addTaskLabel">Add Goal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <p class="lead">
+            login
+        </p>
+        <form method="POST">
+          
+            <div class="mb-3">
+                <label for="nickname" class="col-form-label">Goal Name</label>
+                <input type="text" class="form-control" id="nickname" name="nickname" placeholder="Enter Goal name">
+            </div>
+            
+            <input type="submit" class="btn btn-primary">
+            </form>
+     
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          
+        </div>
+        </div>
+        </div>
+        </div>
+  
 </body>
 </html>
