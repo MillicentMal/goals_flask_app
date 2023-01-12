@@ -8,7 +8,7 @@ from werkzeug.utils import redirect
 # app creation adn configuration
 app = Flask(__name__)
 # failing to deploy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Lethabo2016.@localhost:3306/app'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:2016@localhost:3306/app'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "my super secret key that no one is supposed to know"
 db = SQLAlchemy(app)
@@ -181,6 +181,7 @@ def edit_task(task_id):
     else:
         task.name = request.form.get("name")
         task.description = request.form.get("description")
+        task.completed = "TO-DO"
         db.session.commit()
         return redirect(url_for('tasks'))
     
